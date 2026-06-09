@@ -194,6 +194,10 @@
       <span class="item-name">hero-cone</span>
       <span class="item-file">hero-cone.html</span>
     </button>
+    <button class="sidebar-item" data-snippet="swoosh-cards" type="button">
+      <span class="item-name">Swoosh Cards</span>
+      <span class="item-file">swoosh-cards.html</span>
+    </button>
     <button class="sidebar-item" data-snippet="feature-row" type="button">
       <span class="item-name">feature-row</span>
       <span class="item-file">feature-row.html</span>
@@ -238,6 +242,49 @@
   </main>
 
   <!-- ============ SNIPPET SOURCES — registry of what the workshop can load ============ -->
+  <template id="tmpl-swoosh-cards">
+    <style>
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f2f2f2; padding: 48px 24px 80px; }
+      @keyframes swooshLeft {
+        from { opacity: 0; transform: translateX(-110vw); }
+        to   { opacity: 1; transform: translateX(0); }
+      }
+      @keyframes swooshRight {
+        from { opacity: 0; transform: translateX(110vw); }
+        to   { opacity: 1; transform: translateX(0); }
+      }
+      .cards { display: flex; flex-direction: column; gap: 20px; max-width: 800px; margin: 0 auto; }
+      .card {
+        display: grid; grid-template-columns: 1fr 1fr;
+        border-radius: 4px; overflow: hidden;
+        border: 1.5px solid #e0e0e0; background: #fff;
+        opacity: 0;
+      }
+      .card.is-visible       { animation: swooshLeft  1.1s cubic-bezier(0.16,1,0.3,1) forwards; }
+      .card.reverse.is-visible { animation: swooshRight 1.1s cubic-bezier(0.16,1,0.3,1) forwards; }
+      .card-img { background: #d0d0d0; min-height: 200px; display: flex; align-items: center; justify-content: center; color: #999; font-size: 13px; }
+      .card.reverse .card-img { order: 2; }
+      .card.reverse .card-info { order: 1; }
+      .card-info { padding: 32px 28px; display: flex; flex-direction: column; justify-content: center; gap: 8px; }
+      .card-info h3 { font-size: 20px; font-weight: 800; color: #111; }
+      .card-info p  { font-size: 14px; color: #666; line-height: 1.6; }
+      .spacer { height: 60vh; display: flex; align-items: center; justify-content: center; color: #aaa; font-size: 13px; }
+    </style>
+    <div class="spacer">↓ scroll down to trigger swoosh ↓</div>
+    <div class="cards">
+      <div class="card" data-swoosh>
+        <div class="card-img">Image — from LEFT</div>
+        <div class="card-info"><h3>Card One</h3><p>This card swooshes in from the left as it enters the viewport.</p></div>
+      </div>
+      <div class="card reverse" data-swoosh>
+        <div class="card-img">Image — from RIGHT</div>
+        <div class="card-info"><h3>Card Two</h3><p>This card swooshes in from the right, alternating direction.</p></div>
+      </div>
+    </div>
+    <div class="spacer"></div>
+  </template>
+
   <template id="tmpl-hero-cone">
     <section class="hero">
       <div class="container hero-inner hero-cone">
@@ -585,6 +632,19 @@
     (function () {
       // ---- Registry: what the sidebar can load -------------------------
       var REGISTRY = {
+        'swoosh-cards': {
+          name: 'Swoosh Cards', file: 'swoosh-cards.html',
+          desc: 'Cards that swoosh in from alternating sides on scroll (IntersectionObserver + @keyframes)',
+          template: 'tmpl-swoosh-cards',
+          play: function (doc, win) {
+            var observer = new win.IntersectionObserver(function (entries) {
+              entries.forEach(function (entry) {
+                if (entry.isIntersecting) entry.target.classList.add('is-visible');
+              });
+            }, { threshold: 0, rootMargin: '0px 0px -15% 0px' });
+            doc.querySelectorAll('[data-swoosh]').forEach(function (el) { observer.observe(el); });
+          }
+        },
         'hero-cone': {
           name: 'hero-cone', file: 'hero-cone.html',
           desc: 'Hero with the "cone drop" entrance animation',
