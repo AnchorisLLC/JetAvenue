@@ -23,7 +23,7 @@ const { items } = Astro.props;
       {items.map((item, i) => (
         <div class={`fleet-card${i % 2 === 1 ? ' fleet-card--reverse' : ''}`}>
           <div class="fleet-img-wrap">
-            <img src={item.img} alt={item.imgAlt} loading="lazy" />
+            <img src={item.img} alt={item.imgAlt} loading="lazy" class={item.img === item.logo ? 'is-logo' : ''} />
           </div>
           <div class="fleet-info">
             {item.logo && <img src={item.logo} alt={`${item.name} logo`} class="fleet-logo" />}
@@ -68,12 +68,18 @@ const { items } = Astro.props;
 
   .fleet-img-wrap {
     aspect-ratio: 16/9; overflow: hidden;
+    background: #f0f0f0;
+    display: flex; align-items: center; justify-content: center;
   }
   .fleet-img-wrap img {
     width: 100%; height: 100%; object-fit: cover; display: block;
     transition: transform 0.4s ease;
   }
-  .fleet-card:hover .fleet-img-wrap img { transform: scale(1.03); }
+  .fleet-img-wrap img.is-logo {
+    width: 55%; height: auto; object-fit: contain;
+    opacity: 0.35; filter: grayscale(1);
+  }
+  .fleet-card:hover .fleet-img-wrap img:not(.is-logo) { transform: scale(1.03); }
 
   .fleet-info {
     padding: 28px 28px 32px;
