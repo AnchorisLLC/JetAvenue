@@ -4,6 +4,7 @@ interface FleetItem {
   models: string;
   img: string;
   imgAlt: string;
+  logo?: string;
 }
 
 interface Props {
@@ -25,6 +26,7 @@ const { items } = Astro.props;
             <img src={item.img} alt={item.imgAlt} loading="lazy" />
           </div>
           <div class="fleet-info">
+            {item.logo && <img src={item.logo} alt={`${item.name} logo`} class="fleet-logo" />}
             <h3>{item.name}</h3>
             <p class="fleet-models">{item.models}</p>
           </div>
@@ -76,6 +78,10 @@ const { items } = Astro.props;
   .fleet-info {
     padding: 28px 28px 32px;
     display: flex; flex-direction: column; justify-content: center;
+  }
+  .fleet-logo {
+    height: 28px; width: auto; display: block; margin-bottom: 16px;
+    opacity: 0.75; filter: grayscale(1);
   }
   .fleet-info h3 {
     font-family: var(--font-heading); font-size: 22px; font-weight: 800;
