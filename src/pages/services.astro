@@ -1,109 +1,138 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import FleetCards from '../components/FleetCards.astro';
+import CtaStrip from '../components/CtaStrip.astro';
+
+const fleetItems = [
+  {
+    name: 'Gulfstream',
+    models: 'GIV · G450 · GV · G550 · G650 · G500 · G600',
+    img: '/images/fleet/gulfstream-logo.svg',
+    imgAlt: 'Gulfstream private jet on the ramp',
+    logo: '/images/fleet/gulfstream-logo.svg',
+  },
+  {
+    name: 'Bombardier',
+    models: 'Challenger 300 · 350 · 3500 · 604 · 605 · 650 · Global Express · XRS · 5000 · 6000 · 7500 · CRJ 800',
+    img: '/images/fleet/bombardier-logo.svg',
+    imgAlt: 'Bombardier Challenger private jet',
+    logo: '/images/fleet/bombardier-logo.svg',
+  },
+  {
+    name: 'Dassault',
+    models: 'DA50 · Falcon 900 · 2000 · 2000 EX EASY · 7X',
+    img: '/images/fleet/dassault-logo.svg',
+    imgAlt: 'Dassault Falcon private jet',
+    logo: '/images/fleet/dassault-logo.svg',
+  },
+  {
+    name: 'Embraer',
+    models: 'ERJ135 · ERJ145 · Legacy 600 · Legacy 650 · E-Jet 190',
+    img: '/images/fleet/embraer-logo.svg',
+    imgAlt: 'Embraer Legacy private jet',
+    logo: '/images/fleet/embraer-logo.svg',
+  },
+  {
+    name: 'Cessna',
+    models: 'Citation 560XL · 560XLS · CIT X · 680 · 680A',
+    img: '/images/fleet/cessna-logo.svg',
+    imgAlt: 'Cessna Citation private jet',
+    logo: '/images/fleet/cessna-logo.svg',
+  },
+];
 
 const services = [
   {
     id: 'line-maintenance',
-    title: 'Line & Schedule Maintenance',
-    panelColor: '#3A5A8C',
-    img: '/images/services/line-maintenance.jpg',
-    imgAlt: 'Private jet on the ramp during line maintenance',
+    eyebrow: 'LINE & SCHEDULED MAINTENANCE',
+    title: 'Your Aircraft, On Time and In Compliance',
+    color: '#3A5A8C',
+    description: 'Scheduled downtime is unavoidable — unplanned downtime is not. Our line maintenance teams respond fast, coordinate directly with your flight department, and execute with the discipline of a Part 145 operation. Whether it\'s a quick-turn RON check before a morning departure or a multi-day scheduled event, JetAvenue keeps your aircraft airworthy and your schedule intact.',
     bullets: [
-      'Quick response support: Schedule MX, RON checks, MEL clearing, systems troubleshooting',
-      'Engine Borescopes: Tay 611, BR 700, PW 800, 36-150 APUs',
-      'Certified for 91.411 & 91.413 checks; attaining NDT levels I, II & III',
-      'SDL Hangar Schedule & Line MX; VNY & LGB hangar access',
-      'Support under Part 65 privileges if fleet not in Ops Specs',
-      'Over 200 years combined maintenance experience',
+      'RON checks, MEL clearing & schedule MX',
+      'Engine borescopes: Tay 611, BR 700, PW 800, 36-150 APUs',
+      '91.411 & 91.413 checks; NDT levels I, II & III',
+      'Hangar access at VNY, LGB & SDL',
+      'Part 65 privileges — 200+ years combined experience',
     ],
   },
   {
     id: 'interior',
-    title: 'Mobile Interior Repair',
-    panelColor: '#8B6842',
-    img: '/images/services/interior-repair.jpg',
-    imgAlt: 'Technician repairing leather seating in private jet cabin',
+    eyebrow: 'MOBILE INTERIOR REPAIR & CLEANING',
+    title: 'Cabin Quality That Reflects Your Standards',
+    color: '#8B6842',
+    description: 'The cabin is the first thing a passenger notices and the last thing most operators want to ground an aircraft over. Our mobile interior technicians handle the full spectrum of cabin work on-site — from leather repair and woodwork to carpet extraction and post-maintenance detailing — so your aircraft looks the part without a trip to a shop.',
     bullets: [
-      'Leather repair & dye — seats, panels, curtains, headliners, dado panels, cockpit panels',
-      'Removals & installations of interiors or equipment components',
-      'Woodwork repair — scratches, chipping, scuffing, delamination, cracks up to 10"',
-      'Panel recovering & repair — headliners, PSUs, upper/lower panels, head bumpers',
-      'Carpet repairs, sewing, curtain repairs, mirror replacements',
-      'Lav sink plating touch up & polish; baggage panel repairs',
+      'Leather repair & dye — seats, panels, headliners, dado & cockpit panels',
+      'Woodwork — scratches, chipping, delamination, cracks up to 10"',
+      'Panel recovering, headliners, PSUs, upper/lower panels',
+      'Carpet repair & extraction, sewing, curtains, mirror replacements',
+      'Interior & exterior cleaning, leather conditioning, post-MX detailing',
     ],
   },
   {
     id: 'avionics',
-    title: 'Avionics Support',
-    panelColor: '#2A3A52',
-    img: '/images/services/avionics.jpg',
-    imgAlt: 'Avionics panel in a private jet cockpit',
+    eyebrow: 'AVIONICS SUPPORT',
+    title: 'Flight-Critical Systems, Diagnosed at the Aircraft',
+    color: '#2A3A52',
+    description: 'Avionics issues rarely wait for a convenient moment. JetAvenue\'s avionics technicians travel to the aircraft, troubleshoot on-site, and carry the documentation to back it up. From routine compliance checks to CMS diagnostics and QAR downloads, we perform the work that keeps your aircraft legal, current, and ready to fly.',
     bullets: [
-      'Troubleshoot, diagnose & routine maintenance',
-      'Nav Aids',
-      'Pitot Static Systems & 91.411 / 91.413 checks',
-      'CMS Systems',
-      'QAR / FDR downloads',
-    ],
-  },
-  {
-    id: 'cleaning',
-    title: 'Cleaning',
-    panelColor: '#3A6155',
-    img: '/images/services/cleaning.jpg',
-    imgAlt: 'Private jet exterior being cleaned on the ramp',
-    bullets: [
-      'Interior & exterior cleaning, all levels',
-      'Leather conditioning',
-      'Carpet extraction',
-      'Coordinated with MX team post-maintenance events',
+      'Systems troubleshooting, diagnostics & routine maintenance',
+      'Nav Aids installation & maintenance',
+      'Pitot Static systems & 91.411 / 91.413 checks',
+      'CMS systems & QAR / FDR downloads',
     ],
   },
 ];
 ---
 
-<BaseLayout title="Services — JetAvenue" description="JetAvenue offers line maintenance, mobile interior repair, avionics support, and cleaning for private jets nationwide.">
+<BaseLayout title="Services — JetAvenue" description="JetAvenue provides line maintenance, mobile interior repair & cleaning, and avionics support for private jets — at your aircraft, nationwide.">
 
-  <div class="page-header">
+  <!-- Hero -->
+  <section class="svc-hero">
     <p class="eyebrow">WHAT WE DO</p>
-    <h1>Our Services</h1>
-    <p class="subhead">Professional, quality, reliable — we come to your aircraft, wherever it is.</p>
-  </div>
-
-  <div class="services-list">
-    {services.map((s, i) => (
-      <section class={`service-row ${i % 2 === 1 ? 'reverse' : ''}`} id={s.id}>
-        <div class="service-img-wrap" style={`--panel:${s.panelColor}`}>
-          <img src={s.img} alt={s.imgAlt} loading="lazy" />
-        </div>
-        <div class="service-content" style={`border-top: 4px solid ${s.panelColor}`}>
-          <h2>{s.title}</h2>
-          <ul>
-            {s.bullets.map(b => <li>{b}</li>)}
-          </ul>
-          <a href="/contact" class="service-cta" style={`background:${s.panelColor}`}>Get a Free Assessment</a>
-        </div>
-      </section>
-    ))}
-  </div>
-
-  <!-- Fleets strip -->
-  <section class="fleets-strip">
-    <p class="eyebrow">AIRCRAFT WE SERVICE</p>
-    <h2>Supported Fleets</h2>
-    <div class="fleet-grid">
-      <div class="fleet-item"><strong>Gulfstream</strong><span>GIV · G450 · GV · G550 · G650 · G500 · G600</span></div>
-      <div class="fleet-item"><strong>Bombardier</strong><span>Challenger 300/350/3500/604/605/650 · Global Express · XRS · 5000/6000/7500 · CRJ 800</span></div>
-      <div class="fleet-item"><strong>Dassault</strong><span>DA50 · 900 · 2000 · 2000 EX EASY · 7X</span></div>
-      <div class="fleet-item"><strong>Embraer</strong><span>ERJ135/145 · Legacy 600/650 · E-Jet 190</span></div>
-      <div class="fleet-item"><strong>Cessna</strong><span>560XL/XLS · CIT X · 680 · 680A</span></div>
+    <h1>Full-Spectrum Mobile Maintenance</h1>
+    <p class="subhead">Three disciplines. One team. Deployed to your aircraft — at your FBO, home base, or wherever it's parked. No ferry flights, no repositioning, no waiting.</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><span class="stat-n">200+</span><span class="stat-l">Years Combined Experience</span></div>
+      <div class="hero-div"></div>
+      <div class="hero-stat"><span class="stat-n">3</span><span class="stat-l">Integrated Service Disciplines</span></div>
+      <div class="hero-div"></div>
+      <div class="hero-stat"><span class="stat-n">5</span><span class="stat-l">Airframe Families Supported</span></div>
     </div>
   </section>
+
+  <!-- Service cards -->
+  <section class="svc-cards-section">
+    <div class="svc-cards-container">
+      {services.map((s) => (
+        <div class="svc-card" id={s.id} data-svc-card>
+          <div class="svc-card-accent" style={`background:${s.color}`}></div>
+          <div class="svc-card-body">
+            <p class="svc-eyebrow" style={`color:${s.color}`}>{s.eyebrow}</p>
+            <h2>{s.title}</h2>
+            <p class="svc-desc">{s.description}</p>
+            <ul class="svc-bullets">
+              {s.bullets.map(b => <li>{b}</li>)}
+            </ul>
+            <div class="svc-btns">
+              <a href="/contact" class="btn-outline" style={`--c:${s.color}`}>Get in Touch</a>
+              <a href="/work-order" class="btn-solid" style={`background:${s.color}`}>Submit Work Order →</a>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <FleetCards items={fleetItems} />
+  <CtaStrip />
 
 </BaseLayout>
 
 <style>
-  .page-header {
+  /* ── Hero ── */
+  .svc-hero {
     background: var(--color-surface);
     text-align: center;
     padding: var(--space-xl) var(--space-md) var(--space-lg);
@@ -112,96 +141,142 @@ const services = [
   .eyebrow {
     font-family: var(--font-heading); font-size: 11px; font-weight: 700;
     letter-spacing: 0.2em; color: var(--color-brand); text-transform: uppercase;
-    margin: 0 0 12px;
+    margin: 0 0 14px;
   }
-  .page-header h1 {
-    font-family: var(--font-heading); font-size: clamp(32px, 5vw, 52px);
-    font-weight: 800; color: var(--color-ink); margin: 0 0 14px; letter-spacing: -0.02em;
+  .svc-hero h1 {
+    font-family: var(--font-heading); font-size: clamp(30px, 4.5vw, 52px);
+    font-weight: 800; color: var(--color-ink); margin: 0 0 18px; letter-spacing: -0.02em;
   }
   .subhead {
     font-family: var(--font-body); font-size: 17px; color: var(--color-body);
-    max-width: 540px; margin: 0 auto; line-height: 1.6;
+    max-width: 600px; margin: 0 auto 40px; line-height: 1.7;
+  }
+  .hero-stats {
+    display: flex; align-items: center; justify-content: center;
+    flex-wrap: wrap; gap: 0;
+    border-top: 1px solid var(--color-border);
+    padding-top: 32px;
+  }
+  .hero-stat { text-align: center; padding: 8px 40px; }
+  .stat-n {
+    display: block; font-family: var(--font-heading); font-size: 32px;
+    font-weight: 800; color: var(--color-brand); line-height: 1;
+  }
+  .stat-l {
+    display: block; font-family: var(--font-heading); font-size: 10px;
+    font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--color-body); margin-top: 6px;
+  }
+  .hero-div { width: 1px; height: 44px; background: var(--color-border); }
+
+  /* ── Service cards ── */
+  .svc-cards-section {
+    padding: 80px 0 96px;
+    background: #fff;
+  }
+  .svc-cards-container {
+    max-width: 860px; margin: 0 auto; padding: 0 var(--space-md);
+    display: flex; flex-direction: column; gap: 32px;
   }
 
-  /* ── Service rows ── */
-  .services-list { display: flex; flex-direction: column; }
+  .svc-card {
+    display: flex;
+    border: 1.5px solid var(--color-border);
+    border-radius: 4px;
+    overflow: hidden;
+    background: #fff;
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  .svc-card.is-visible {
+    animation: fadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .svc-card { opacity: 1; transform: none; }
+    .svc-card.is-visible { animation: none; }
+  }
 
-  .service-row {
-    display: grid; grid-template-columns: 1fr;
-    border-bottom: 1px solid var(--color-border);
+  .svc-card-accent {
+    width: 5px; flex-shrink: 0;
   }
-  .service-img-wrap {
-    aspect-ratio: 16/9; overflow: hidden; background: #ccc;
-    position: relative;
+  .svc-card-body {
+    padding: 36px 36px 40px;
+    display: flex; flex-direction: column; gap: 16px;
+    flex: 1;
   }
-  .service-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-  .service-content {
-    padding: var(--space-lg) var(--space-md);
-    display: flex; flex-direction: column; gap: var(--space-sm);
-    justify-content: center;
+  .svc-eyebrow {
+    font-family: var(--font-heading); font-size: 10px; font-weight: 700;
+    letter-spacing: 0.18em; text-transform: uppercase; margin: 0;
   }
-  .service-content h2 {
-    font-family: var(--font-heading); font-size: 26px; font-weight: 800;
-    color: var(--color-ink); margin: 0; letter-spacing: -0.01em;
+  .svc-card-body h2 {
+    font-family: var(--font-heading); font-size: clamp(20px, 2.5vw, 26px);
+    font-weight: 800; color: var(--color-ink); margin: 0; letter-spacing: -0.01em;
+    line-height: 1.2;
   }
-  .service-content ul {
+  .svc-desc {
+    font-family: var(--font-body); font-size: 15px; color: var(--color-body);
+    line-height: 1.75; margin: 0;
+  }
+
+  .svc-bullets {
     list-style: none; padding: 0; margin: 0;
-    display: flex; flex-direction: column; gap: 8px;
+    display: flex; flex-direction: column; gap: 7px;
   }
-  .service-content li {
+  .svc-bullets li {
     font-family: var(--font-body); font-size: 14px; color: var(--color-body);
     line-height: 1.5; padding-left: 18px; position: relative;
   }
-  .service-content li::before {
+  .svc-bullets li::before {
     content: '▶'; position: absolute; left: 0;
-    color: var(--color-brand); font-size: 9px; top: 4px;
+    color: var(--color-brand); font-size: 8px; top: 5px;
   }
-  .service-cta {
-    display: inline-block; margin-top: 8px; padding: 12px 28px;
-    color: #fff; font-family: var(--font-heading); font-size: 13px;
-    font-weight: 700; letter-spacing: 0.05em; text-decoration: none;
-    border-radius: 3px; align-self: flex-start;
+
+  .svc-btns {
+    display: flex; gap: 12px; flex-wrap: wrap; padding-top: 4px;
+  }
+  .btn-outline {
+    display: inline-block; padding: 11px 22px;
+    border: 2px solid var(--c, var(--color-brand)); color: var(--c, var(--color-brand));
+    background: transparent; border-radius: 3px;
+    font-family: var(--font-heading); font-size: 13px; font-weight: 700;
+    letter-spacing: 0.04em; text-decoration: none;
+    transition: background 0.18s, color 0.18s;
+  }
+  .btn-outline:hover { background: var(--c, var(--color-brand)); color: #fff; }
+  .btn-solid {
+    display: inline-block; padding: 11px 22px;
+    color: #fff; border-radius: 3px;
+    font-family: var(--font-heading); font-size: 13px; font-weight: 700;
+    letter-spacing: 0.04em; text-decoration: none;
     transition: opacity 0.18s;
   }
-  .service-cta:hover { opacity: 0.85; }
+  .btn-solid:hover { opacity: 0.85; }
 
-  @media (min-width: 900px) {
-    .service-row { grid-template-columns: 1fr 1fr; min-height: 420px; }
-    .service-row.reverse .service-img-wrap { order: 2; }
-    .service-row.reverse .service-content  { order: 1; }
-    .service-img-wrap { aspect-ratio: unset; }
-    .service-content { padding: var(--space-xl) var(--space-xl); }
-    .service-content h2 { font-size: 32px; }
-    .service-content li { font-size: 15px; }
-  }
-
-  /* ── Fleets strip ── */
-  .fleets-strip {
-    background: var(--color-surface);
-    padding: var(--space-xl) var(--space-md);
-    text-align: center;
-  }
-  .fleets-strip h2 {
-    font-family: var(--font-heading); font-size: clamp(24px, 3vw, 36px);
-    font-weight: 800; color: var(--color-ink); margin: 0 0 var(--space-lg);
-    letter-spacing: -0.02em;
-  }
-  .fleet-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: var(--space-md); max-width: 1000px; margin: 0 auto; text-align: left;
-  }
-  .fleet-item {
-    background: #fff; border-radius: 3px; padding: var(--space-md);
-    border: 1px solid var(--color-border);
-    display: flex; flex-direction: column; gap: 6px;
-  }
-  .fleet-item strong {
-    font-family: var(--font-heading); font-size: 15px; font-weight: 700;
-    color: var(--color-ink);
-  }
-  .fleet-item span {
-    font-family: var(--font-body); font-size: 13px; color: var(--color-body);
-    line-height: 1.5;
+  @media (max-width: 600px) {
+    .hero-div { display: none; }
+    .hero-stat { padding: 8px 20px; }
+    .svc-card-body { padding: 24px 20px 28px; }
+    .svc-btns { flex-direction: column; }
+    .btn-outline, .btn-solid { text-align: center; }
   }
 </style>
+
+<script>
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0, rootMargin: '0px 0px -10% 0px' }
+  );
+  document.querySelectorAll('[data-svc-card]').forEach((card) => observer.observe(card));
+</script>

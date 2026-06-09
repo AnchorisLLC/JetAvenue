@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import ServiceSlider from '../components/ServiceSlider.astro';
 import FAQ from '../components/FAQ.astro';
 import FleetCards from '../components/FleetCards.astro';
+import CtaStrip from '../components/CtaStrip.astro';
 
 const fleetItems = [
   {
@@ -106,6 +107,7 @@ const slides = [
   <ServiceSlider slides={slides} />
   <FleetCards items={fleetItems} />
   <FAQ items={faqItems} />
+  <CtaStrip />
 
 </BaseLayout>
 
