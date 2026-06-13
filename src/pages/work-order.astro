@@ -3,8 +3,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout
-  title="Submit a Work Order — JetAvenue Mobile Jet Maintenance"
-  description="Submit a work order for mobile private jet maintenance with JetAvenue. Line MX, interior repair, avionics support — FAA-certified technicians dispatched to your aircraft."
+  title="Submit a Work Order: JetAvenue Mobile Jet Maintenance"
+  description="Submit a work order for mobile private jet maintenance with JetAvenue. Line MX, interior repair, avionics support. FAA-certified technicians dispatched to your aircraft."
   canonicalPath="/work-order"
 >
 
@@ -145,8 +145,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <div class="wo-group">
           <label>Location of Services (include FBO) <span class="req">*</span></label>
           <div class="wo-radios wo-radios--wrap">
-            <label class="radio-label"><input type="radio" name="location" value="VNY" required /> VNY — Van Nuys</label>
-            <label class="radio-label"><input type="radio" name="location" value="SDL" /> SDL — Scottsdale</label>
+            <label class="radio-label"><input type="radio" name="location" value="VNY" required /> VNY: Van Nuys</label>
+            <label class="radio-label"><input type="radio" name="location" value="SDL" /> SDL: Scottsdale</label>
             <label class="radio-label"><input type="radio" name="location" value="Other" id="locOther" /> Other</label>
             <input type="text" id="locOtherText" name="location_other" placeholder="Airport / FBO…" class="loc-other-input" disabled />
           </div>
@@ -166,7 +166,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <div class="wo-group">
           <label for="wo-attach">Attach Document</label>
           <input type="file" id="wo-attach" name="attachment" class="file-input" />
-          <p class="field-note">Accepted: PDF, JPG, PNG — max 10 MB</p>
+          <p class="field-note">Accepted: PDF, JPG, PNG, max 10 MB</p>
         </div>
 
         <!-- ── Payment & Authorization ── -->
@@ -207,7 +207,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </div>
 
         <input type="hidden" name="_replyto" id="wo-replyto" />
-        <input type="hidden" name="_subject" value="New Work Order Authorization — JetAvenue" />
+        <input type="hidden" name="_subject" value="New Work Order Authorization: JetAvenue" />
 
         <button type="submit" class="wo-btn">Submit Work Order →</button>
         <div class="wo-success" style="display:none;">Your work order has been submitted. We'll confirm within one business day.</div>
