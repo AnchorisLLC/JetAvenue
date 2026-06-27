@@ -1,0 +1,62 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Server Error — JetAvenue"
+  description="Something went wrong on our end. Please try again."
+>
+  <section class="error-page">
+    <p class="error-code">500</p>
+    <h1>Something Went Wrong</h1>
+    <p class="error-msg">We hit a snag on our end. Try refreshing the page, or reach out and we'll sort it out.</p>
+    <div class="error-btns btn-row">
+      <a href="/" class="btn-outline">Back to Home</a>
+      <a href="mailto:mx@jetavenue.net" class="btn-solid">Email Us →</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .error-page {
+    min-height: 60vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center;
+    padding: var(--space-xl) var(--space-md);
+    background: var(--color-surface);
+  }
+  .error-code {
+    font-family: var(--font-heading); font-size: clamp(80px, 15vw, 140px);
+    font-weight: 800; color: var(--color-brand); opacity: 0.15;
+    line-height: 1; margin: 0 0 8px;
+    letter-spacing: -0.04em;
+  }
+  .error-page h1 {
+    font-family: var(--font-heading); font-size: clamp(26px, 4vw, 42px);
+    font-weight: 800; color: var(--color-ink); margin: 0 0 16px;
+    letter-spacing: -0.02em;
+  }
+  .error-msg {
+    font-family: var(--font-body); font-size: 16px; color: var(--color-body);
+    max-width: 460px; line-height: 1.7; margin: 0 auto 36px;
+  }
+  .error-btns { justify-content: center; }
+  .btn-outline {
+    display: inline-block; padding: 11px 24px;
+    border: 2px solid var(--color-brand); color: var(--color-brand);
+    background: transparent; border-radius: 3px;
+    font-family: var(--font-heading); font-size: 13px; font-weight: 700;
+    letter-spacing: 0.04em; text-decoration: none;
+    transition: background 0.18s, color 0.18s;
+  }
+  .btn-outline:hover { background: var(--color-brand); color: #fff; }
+  .btn-solid {
+    display: inline-block; padding: 11px 24px;
+    background: var(--color-brand); color: #fff;
+    border: 2px solid transparent; border-radius: 3px;
+    font-family: var(--font-heading); font-size: 13px; font-weight: 700;
+    letter-spacing: 0.04em; text-decoration: none;
+    transition: opacity 0.18s;
+  }
+  .btn-solid:hover { opacity: 0.85; }
+</style>

@@ -5,4 +5,5 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://jetavenue.net',
   integrations: [sitemap()],
+  server: { host: true },
 });

@@ -3,14 +3,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout
-  title="Submit a Work Order: JetAvenue Mobile Jet Maintenance"
-  description="Submit a work order for mobile private jet maintenance with JetAvenue. Line MX, interior repair, avionics support. FAA-certified technicians dispatched to your aircraft."
+  title="Work Authorization — JetAvenue Mobile Jet Maintenance"
+  description="Submit a work authorization for mobile private jet maintenance with JetAvenue. Line MX, interior repair, avionics support. FAA-certified technicians dispatched to your aircraft."
   canonicalPath="/work-order"
 >
 
   <section class="wo-hero">
     <p class="eyebrow">GET STARTED</p>
-    <h1>Work Order Authorization</h1>
+    <h1>Work Authorization</h1>
     <p>Complete this form to authorize service. Required fields are marked with an asterisk (*).</p>
   </section>
 
@@ -122,6 +122,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
         <!-- ── Service Info ── -->
         <div class="wo-group">
+          <label>Is your aircraft AOG? <span class="req">*</span></label>
+          <div class="wo-radios">
+            <label class="radio-label"><input type="radio" name="aog" value="No" /> No</label>
+            <label class="radio-label"><input type="radio" name="aog" value="Yes" /> Yes</label>
+          </div>
+        </div>
+
+        <div class="wo-group">
           <label>Plane Locked? <span class="req">*</span></label>
           <div class="wo-radios">
             <label class="radio-label"><input type="radio" name="plane_locked" value="No" checked /> No</label>
@@ -130,15 +138,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </div>
 
         <div class="wo-group">
-          <label for="wo-service">Service Required <span class="req">*</span></label>
-          <textarea id="wo-service" name="service_required" rows="4" placeholder="Describe the service needed…" required></textarea>
-        </div>
-
-        <div class="wo-group">
           <label>Overtime Authorized?</label>
           <div class="wo-radios">
-            <label class="radio-label"><input type="radio" name="overtime" value="Yes" /> Yes</label>
-            <label class="radio-label"><input type="radio" name="overtime" value="No" checked /> No</label>
+            <label class="radio-label"><input type="radio" name="overtime" value="Yes" checked /> Yes</label>
+            <label class="radio-label"><input type="radio" name="overtime" value="No" /> No</label>
           </div>
         </div>
 
@@ -163,10 +166,47 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           </div>
         </div>
 
+        <!-- ── Document Uploads ── -->
         <div class="wo-group">
-          <label for="wo-attach">Attach Document</label>
-          <input type="file" id="wo-attach" name="attachment" class="file-input" />
-          <p class="field-note">Accepted: PDF, JPG, PNG, max 10 MB</p>
+          <label>Documents</label>
+          <div class="upload-zones">
+
+            <div class="upload-zone">
+              <div class="upload-zone-header">
+                <span class="upload-zone-label">Scope of Work (SOW) <span class="req">*</span></span>
+                <span class="upload-zone-note">PDF or image</span>
+              </div>
+              <input type="file" id="upload-sow" name="sow" accept=".pdf,image/jpeg,image/png,image/webp,image/heic,image/gif,image/tiff" multiple class="upload-input" required />
+              <label for="upload-sow" class="upload-btn">Choose Files</label>
+              <ul class="file-list" id="sow-list"></ul>
+            </div>
+
+            <div class="upload-zone">
+              <div class="upload-zone-header">
+                <span class="upload-zone-label">Photos</span>
+                <span class="upload-zone-note">JPG, PNG, HEIC, WEBP, etc.</span>
+              </div>
+              <input type="file" id="upload-pics" name="photos" accept="image/*" multiple class="upload-input" />
+              <label for="upload-pics" class="upload-btn">Choose Files</label>
+              <ul class="file-list" id="pics-list"></ul>
+            </div>
+
+            <div class="upload-zone">
+              <div class="upload-zone-header">
+                <span class="upload-zone-label">Purchase Order (PO)</span>
+                <span class="upload-zone-note">PDF or image</span>
+              </div>
+              <input type="file" id="upload-po" name="po" accept=".pdf,image/jpeg,image/png,image/webp,image/heic,image/gif,image/tiff" multiple class="upload-input" />
+              <label for="upload-po" class="upload-btn">Choose Files</label>
+              <ul class="file-list" id="po-list"></ul>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="wo-group">
+          <label for="wo-service">Service Required <span class="req">*</span></label>
+          <textarea id="wo-service" name="service_required" rows="4" placeholder="Describe the service needed…" required></textarea>
         </div>
 
         <!-- ── Payment & Authorization ── -->
@@ -174,13 +214,48 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <label for="wo-payment">Method of Payment <span class="req">*</span></label>
           <select id="wo-payment" name="payment_method" required>
             <option value="">Please choose…</option>
-            <option>Credit Card</option>
-            <option>ACH / Wire Transfer</option>
-            <option>Check</option>
-            <option>Net 30</option>
-            <option>Other</option>
+            <option value="Credit Card">Credit Card</option>
+            <option value="Bank/ACH">Bank / ACH Transfer</option>
+            <option value="COD">COD</option>
           </select>
         </div>
+
+        <!-- Credit Card fields -->
+        <div id="pay-cc" class="pay-fields" style="display:none">
+          <div class="wo-cc-row">
+            <div class="wo-group wo-cc-num">
+              <label for="cc-number">Card Number <span class="req">*</span></label>
+              <input type="text" id="cc-number" name="cc_number" placeholder="•••• •••• •••• ••••" maxlength="19" />
+            </div>
+            <div class="wo-group wo-cc-exp">
+              <label for="cc-exp">Expiration <span class="req">*</span></label>
+              <input type="text" id="cc-exp" name="cc_expiration" placeholder="MM / YY" maxlength="7" />
+            </div>
+            <div class="wo-group wo-cc-cvv">
+              <label for="cc-cvv">CVV <span class="req">*</span></label>
+              <input type="text" id="cc-cvv" name="cc_cvv" placeholder="•••" maxlength="4" autocomplete="off" inputmode="numeric" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Bank / ACH fields -->
+        <div id="pay-ach" class="pay-fields" style="display:none">
+          <div class="wo-ach-row">
+            <div class="wo-group wo-ach-bank">
+              <label for="ach-bank">Bank Name <span class="req">*</span></label>
+              <input type="text" id="ach-bank" name="ach_bank_name" placeholder="e.g. Chase, Wells Fargo" />
+            </div>
+            <div class="wo-group wo-ach-routing">
+              <label for="ach-routing">Routing Number <span class="req">*</span></label>
+              <input type="text" id="ach-routing" name="ach_routing_number" placeholder="9-digit routing #" maxlength="9" />
+            </div>
+            <div class="wo-group wo-ach-account">
+              <label for="ach-account">Account Number <span class="req">*</span></label>
+              <input type="text" id="ach-account" name="ach_account_number" placeholder="Account #" />
+            </div>
+          </div>
+        </div>
+        <!-- COD: no fields -->
 
         <div class="wo-group">
           <label for="wo-authorized-by">Service Authorized By <span class="req">*</span></label>
@@ -196,21 +271,81 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
         <!-- ── T&C ── -->
         <div class="wo-tc">
-          <div class="tc-text">
-            <p><strong>JetAvenue Terms & Conditions</strong></p>
-            <p>These terms and conditions accompany the Work Order Authorization. Customer is deemed to accept these Terms and Conditions by submission of this form or by commencement of work. Acceptance supersedes any other conditions, representations, or understandings with respect to this Work Order. JetAvenue LLC reserves the right to halt work if authorization cannot be confirmed.</p>
+          <p class="tc-heading">Jet Avenue Inc. — Terms &amp; Conditions</p>
+          <p class="tc-scroll-hint" id="tc-hint">Scroll to read the full terms, then check the box before submission.</p>
+          <div class="tc-scroll" id="tc-scroll">
+
+            <p>These terms and conditions ("Terms and Conditions") accompany Jet Avenue Inc. ("JetAvenue") Work Authorization and, if accepted as is, form the complete agreement between JetAvenue and Customer ("Agreement"). Customer is deemed to accept these Terms and Conditions by a written or electronic acknowledgment of the accompanying Work Authorization or by commencement of work as contemplated by this Agreement. Acceptance hereof by Customer supersedes, nullifies and voids any other terms, conditions, representations, or understandings, in oral or written form, with respect to the Work Authorization referencing this Agreement.</p>
+
+            <p class="tc-section">GENERAL TERMS AND CONDITIONS</p>
+
+            <p><strong>Authority to Execute:</strong> The person signing this agreement ("customer") has actual authority, as owner of the aircraft or authorized agent for the owner of the aircraft, to authorize JetAvenue to undertake and perform all repair services requested, contemplated, or deemed necessary for the aircraft, as determined by the work proposal attached hereto. When applicable, all references to customer noted in this contract include the owner of the aircraft.</p>
+
+            <p><strong>Scope of Repairs:</strong> Repair services include, but are not limited to, the furnishing of labor, parts, materials, components, appliances, and supplies for the purpose of repairing, restoring, replacing or upgrading the component or aircraft and any items located thereon or attached thereto. A consumable charge of 4.5% will be added to all work orders. Repair services do not include freight charges, fuel or flight costs, and any applicable government taxes or fees, which may also become due and payable. The customer will be required to provide JetAvenue such information as date of installation, hours in service as reflected in aircraft log book, nature of defect and any other information to allow JetAvenue the opportunity to meet vendor's warranty requirements.</p>
+
+            <p><strong>Right of Possession:</strong> JetAvenue is entitled to payment for all repair services performed on the component or the aircraft. Until such time as the total amounts owed have been paid, JetAvenue has a right to maintain possession of the component and aircraft and all original logbooks associated therewith. Upon full payment for all repair services performed on the component or aircraft, JetAvenue shall release the aircraft and its accompanying original logbooks to the customer or any other person so designated, in writing, by the owner of the aircraft. For purposes of this section, the owner of the aircraft is to be determined by reference to the most recently recorded Bill of Sale on file with the Federal Aviation Administration (FAA) registry whether it be an individual or entity. Unless otherwise agreed upon in writing, payment for repair services are due and payable upon demand. If payment in good funds is not tendered to JetAvenue within ninety (90) days from the time that fees for repair services become due and payable, JetAvenue is entitled to file and record a mechanic's lien for payments due, which may be enforced in accordance with applicable statutes. JetAvenue is not liable for any damages caused by delay in returning the aircraft to service when the delay is due to failure to make full payment when due.</p>
+
+            <p><strong>Lien Enforcement:</strong> If, prior to the time that full payment for repair services has been made, JetAvenue elects, in its sole and exclusive discretion, to release possession of the aircraft or component, the parties mutually agree that this release of possession constitutes a good and valuable benefit in favor of the customer. For consideration of this benefit, the parties mutually agree that the customer knowingly and intentionally waives any right to contest the validity of any mechanic's lien recorded pursuant to applicable law due to JetAvenue's failure to have actual possession of the aircraft at that time. Regardless of whether JetAvenue relinquishes possession of the aircraft prior to receipt of full payment for repair services, JetAvenue is entitled to maintain possession of the original aircraft or component logbooks until such time as full payment is received.</p>
+
+            <p><strong>Fees for Storage:</strong> In the event that JetAvenue is required to maintain possession of the aircraft due to nonpayment of repair services, JetAvenue is entitled to collect a fee for hangar storage or storage equal to that amount JetAvenue customarily charges for storage of an aircraft or component of like type, commencing upon default of the demand for amounts due and owing. JetAvenue shall thereafter be entitled to maintain and enforce a lien for hangar rent or storage in accordance with applicable statutes.</p>
+
+            <p><strong>No Bailment:</strong> No bailment is created by JetAvenue's possession of the aircraft. The customer bears the risk of loss of the aircraft or component due to unforeseen hazards or events. JetAvenue shall not be liable for any failure to perform repair services due to causes beyond its control, including but not limited to strikes, lockouts or other labor difficulties, machinery breakdowns, inability to obtain transportation, delays of carriers or suppliers, fires, floods, acts of God, acts of terrorism, war or other outbreaks of hostilities, and any foreign or domestic embargoes. Under no circumstances shall either party be liable to the other party for indirect, consequential, special, or exemplary damages, whether in contract or tort (including strict liability and negligence) such as, but not limited to, loss of use or diminution in value.</p>
+
+            <p><strong>No Waiver:</strong> The failure of JetAvenue to immediately enforce any provision, right, or remedy of this contract does not waive the right of JetAvenue to enforce the provision, right, or remedy at some later time, nor does it preclude the right of JetAvenue to enforce any other provision, right, or remedy of this contract. The failure of JetAvenue to immediately collect payments when due is not a waiver of any amounts due and owing, and the acceptance of partial payments does not mean that JetAvenue has waived the right to collect the full amounts due and owing.</p>
+
+            <p><strong>Contract Construction:</strong> In interpreting this contract, the parties agree that it should be interpreted as if neither party had drafted it for its own benefit, such that there is no presumed bias in favor of, or against, either party.</p>
+
+            <p><strong>Severability:</strong> If a court of competent jurisdiction determines that any section of this agreement is not enforceable, or otherwise void or illegal, the remainder of the agreement shall remain in full force and effect, and the parties remain bound by its provisions.</p>
+
+            <p><strong>Applicable Law:</strong> This agreement is to be construed in accordance with the laws of the State of California, United States.</p>
+
+            <p><strong>Dispute Resolution:</strong> Any disputes arising under this agreement, including claims regarding actions leading to the execution of this contract, or for any repair services performed hereunder, shall be resolved by adjudication in the civil courts of Los Angeles County, California, United States. The parties agree to waive a jury trial in any such litigation.</p>
+
+            <p><strong>Attorney's Fees:</strong> If JetAvenue is required to take any action to enforce the provisions of this agreement, Customer agrees to compensate JetAvenue for the incursion of any court costs and attorney's fees. Attorney's fees include appellate fees.</p>
+
+            <p class="tc-section">JETAVENUE PARTS EXTENDED LIMITED WARRANTY</p>
+
+            <p><strong>1. REPAIR / OVERHAULED EQUIPMENT</strong><br />
+            Jet Avenue Inc. warrants all equipment and spare parts to be free of defects in workmanship and material for a period specified. Repaired units for 30 days and overhauled units for 90 days from date of invoice. The material found defective must be returned within the warranty period. This warranty is limited to repair, replacement or refund of purchase price at JetAvenue's discretion. All freight, labor, resulting damage or related costs caused by the defective part will not be covered unless specifically agreed to in writing by an authorized JetAvenue representative. The cost of removal and installation must be paid by the customer. Purchaser is required to provide JetAvenue such information as the date of installation, hours in service as reflected in aircraft log book, nature of defect and any other information to allow JetAvenue the opportunity to meet vendor's warranty requirements. The warranty is void if the unit shows signs of abuse, alteration(s), broken seal(s), improper installation(s) or packaging inadequate for the protection of the item returned by shipment. The warranties set forth herein are expressly in lieu of any and all other warranties and obligations either expressed or implied, including warranty of merchantability, fitness or suitability for any purpose. If a component is returned for warranty and it is determined that the warranty is denied, customer will be billed for all incurred costs.</p>
+
+            <p><strong>2. EXCHANGE POLICY</strong><br />
+            All exchange core units must be the same identical part number and modification status unless otherwise agreed upon by JetAvenue. If exchange core units are not the same identical part number and modification status, customer will be billed in addition for or forfeit the core deposit for all upgrade and/or replacement costs. Exchange prices are based on the return of identical item with routine overhaul or repair costs. Cost of repair or overhaul above routine charges will be billed in addition to the exchange charges. The exchange price will not be applicable in the case of abnormal or excessive damage due to fire, use, accident, abnormal wear or unauthorized repair. All cores must be returned within ten (10) days from the date of removal or the cost of the core plus non-cash fees will be billed in addition as appropriate by JetAvenue.</p>
+
+            <p><strong>3. CORE RETURN CERTIFICATION REQUIREMENTS</strong><br />
+            Due to the requirement of traceability of parts, JetAvenue will provide a Repairable Core Return tag. This provided tag serves as a component history record for all exchange units. JetAvenue will not accept a core unit without its provided tag completed. The customer will forfeit the core deposit, if any, if the core return tag is not attached to the returned core part. Units found to be uneconomical to repair will be returned to the customer and the core deposit will be forfeited to JetAvenue, or a core deposit will be billed for replacement cost of the component or part.</p>
+
+            <p><strong>4. MATERIAL RETURN POLICY</strong><br />
+            All returns for credit or refund must be accompanied by a return authorization number provided by JetAvenue. Items returned for credit or refund will be billed a restocking fee. This fee will be determined by component due to re-certification fees. Due to FAA requirements, all components returned will have to be re-certified to be placed back into stock.</p>
+
+            <p><strong>5. GENERAL CONDITIONS AS TO COMPONENTS AND PARTS</strong><br />
+            All units are to be shipped prepaid to JetAvenue in an appropriate shipping container to avoid damage during transit. Shipments requiring counter to counter service will be billed all shipping costs in addition to a special handling charge of Seventy-Five United States Dollars (US$75.00). Any assessed HAZMAT fees will be added to and included in the final invoice. JetAvenue reserves the right to make changes in or additions to its policies without prior notice to its customers. All first orders will be billed C.O.D. unless credit terms are pre-arranged. After thirty (30) days, all unpaid balances are subject to one and a half percent (1.5%) per month / eighteen percent (18%) annual percentage rate and the account will be placed on a C.O.D. basis.</p>
+
+            <p><strong>6. CUSTOMER SUPPLIED PARTS</strong><br />
+            Parts supplied by customers will be subject to a handling fee of 15% of Original Equipment Manufacturer (OEM) pricing, not to exceed $7,500.00 (seven-thousand, five-hundred dollars). JetAvenue will not be liable for any labor or part warranty on customer supplied parts if the part(s) fails to operate correctly. Customer supplied parts must be accompanied with all approved documentation prior to installation. Cores for customer supplied parts are the sole responsibility of the customer once returned to the customer. JetAvenue is not liable for any charges assessed for customer supplied parts.</p>
+
+            <p class="tc-section">JETAVENUE LABOR WARRANTY</p>
+
+            <p><strong>1. LABOR FOR PARTS INSTALLED</strong><br />
+            Jet Avenue Inc. warrants all equipment, parts and labor to be free of defects in workmanship and material for thirty (30) days for repaired units and ninety (90) days for overhauled units from the date the aircraft was approved for return to service for the work performed. All labor on any part purchased through a JetAvenue approved vendor and installed by JetAvenue will be covered as detailed in the limited extended warranty. Parts purchased by JetAvenue are subject to JetAvenue's Extended Limited Warranty. All labor rework will be completed at the JetAvenue facility; all expenses incurred for rework completed at a different facility will be covered by the customer. Purchaser will be required to provide JetAvenue such information as date of installation, hours in service as reflected in aircraft log book, nature of defect and any other information to allow JetAvenue the opportunity to meet vendor's warranty requirements. The warranty is void if the unit shows signs of abuse, alterations, broken seals, improper installations or improper packaging for shipment. The warranties set forth herein are expressly in lieu of any and all other warranties and obligations expressed or implied, including warranty of merchantability, fitness or suitability for any purpose. In no event shall JetAvenue be liable for resultant damage, consequential damages or loss of use of components or overall equipment. If a component is returned for warranty and it is determined that the warranty is denied, customer will be billed for all incurred costs.</p>
+
+            <p class="tc-section">LIMITATION OF LIABILITY</p>
+
+            <p>JETAVENUE'S LIABILITY ON ANY CLAIM OF ANY KIND, INCLUDING BREACH OF CONTRACT OR WARRANTY OR FOR NEGLIGENCE OR OTHER CONDUCT, FOR ANY LOSS OR DAMAGE ARISING OUT OF, CONNECTED WITH, OR RESULTING FROM THIS AGREEMENT, OR FROM THE PERFORMANCE OR BREACH THEREOF, OR FROM THE SALE, DELIVERY, RESALE, OR REPAIR OF ANY GOODS COVERED BY OR FURNISHED UNDER THIS AGREEMENT SHALL IN NO CASE EXCEED THE PRICE ALLOCABLE TO THE WORK, GOOD, OR PART THEREOF WHICH GIVES RISE TO THE CLAIM. IN NO EVENT SHALL JETAVENUE BE LIABLE FOR ANY INDIRECT, SPECIAL, CONSEQUENTIAL OR PUNITIVE DAMAGES, INCLUDING BUT NOT LIMITED TO LOST PROFITS. THE LAWS OF SOME STATES DO NOT PERMIT CERTAIN LIMITATIONS ON WARRANTIES OR REMEDIES. IN THE EVENT SUCH A LAW APPLIES, THE FOREGOING EXCLUSIONS AND LIMITATIONS ARE AMENDED INSOFAR, AND ONLY INSOFAR, AS REQUIRED BY SAID LAWS.</p>
+
+            <p>These Terms and Conditions are accepted and approved upon submission of this Work Authorization.</p>
+
           </div>
-          <label class="checkbox-label">
-            <input type="checkbox" name="_terms" id="wo-terms" required />
-            <span>I agree to the Terms and Conditions <span class="req">*</span></span>
+          <label class="checkbox-label" id="tc-check-label">
+            <input type="checkbox" name="_terms" id="wo-terms" required disabled />
+            <span>I have read and agree to the Terms and Conditions <span class="req">*</span></span>
           </label>
         </div>
 
         <input type="hidden" name="_replyto" id="wo-replyto" />
-        <input type="hidden" name="_subject" value="New Work Order Authorization: JetAvenue" />
+        <input type="hidden" name="_subject" value="New Work Authorization: JetAvenue" />
 
-        <button type="submit" class="wo-btn">Submit Work Order →</button>
-        <div class="wo-success" style="display:none;">Your work order has been submitted. We'll confirm within one business day.</div>
+        <button type="submit" class="wo-btn">Submit Work Authorization →</button>
+        <div class="wo-success" style="display:none;">Your work authorization has been submitted. We'll confirm within one business day.</div>
         <div class="wo-error" style="display:none;">Something went wrong. Please email <a href="mailto:mx@jetavenue.net">mx@jetavenue.net</a> directly.</div>
 
       </form>
@@ -269,6 +404,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   .wo-group textarea { resize: vertical; }
 
   .wo-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  .wo-cc-row { display: grid; grid-template-columns: 2fr 1fr 80px; gap: 12px; }
+  .wo-ach-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
   .wo-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 4px; }
 
   .wo-radios { display: flex; flex-wrap: wrap; gap: 20px; align-items: center; margin-top: 4px; }
@@ -287,15 +425,55 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   }
   .loc-other-input:disabled { opacity: 0.4; }
 
-  .file-input {
-    display: block; width: 100%; padding: 10px 0;
-    font-family: var(--font-body); font-size: 14px; color: var(--color-ink);
-    cursor: pointer;
+  .upload-zones {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;
   }
-  .field-note {
-    font-family: var(--font-body); font-size: 12px; color: var(--color-body);
-    margin: 4px 0 0;
+  .upload-zone {
+    border: 1.5px solid var(--color-border); border-radius: 3px;
+    padding: 14px 16px; background: #fff;
+    display: flex; flex-direction: column; gap: 10px;
   }
+  .upload-zone-header { margin-bottom: 2px; }
+  .upload-zone-label {
+    display: block;
+    font-family: var(--font-heading); font-size: 11px; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-ink);
+    line-height: 1.3; margin-bottom: 3px;
+  }
+  .upload-zone-note {
+    display: block;
+    font-family: var(--font-body); font-size: 11px; color: var(--color-body);
+  }
+  .upload-input { display: none; }
+  .upload-btn {
+    display: block; width: 100%; padding: 9px 16px; text-align: center;
+    border: none; border-radius: 3px;
+    font-family: var(--font-heading); font-size: 12px; font-weight: 700 !important;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: #fff !important; background: var(--color-brand);
+    cursor: pointer; transition: opacity 0.15s;
+  }
+  .upload-btn:hover { opacity: 0.85; }
+  .file-list {
+    list-style: none; padding: 0; margin: 0;
+    display: flex; flex-direction: column; gap: 5px;
+  }
+  .file-item {
+    display: flex; align-items: center;
+    padding: 4px 6px 4px 12px; background: var(--color-surface);
+    border: 1px solid var(--color-border); border-radius: 3px;
+  }
+  .file-name {
+    font-family: var(--font-body); font-size: 11px; color: var(--color-body);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1;
+  }
+  .file-remove {
+    background: none; border: none;
+    cursor: pointer; padding: 2px 4px; margin-left: 6px;
+    font-size: 10px; color: var(--color-body); line-height: 1;
+    flex-shrink: 0; opacity: 0.5;
+  }
+  .file-remove:hover { opacity: 1; color: var(--color-brand); }
 
   /* Accordion */
   .wo-accordion {
@@ -320,14 +498,47 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   /* T&C */
   .wo-tc {
-    background: var(--color-surface); border: 1.5px solid var(--color-border);
-    border-radius: 3px; padding: 20px 20px 16px; margin-bottom: 24px;
+    border: 1.5px solid var(--color-border);
+    border-radius: 3px; margin-bottom: 24px; overflow: hidden;
   }
-  .wo-tc p {
-    font-family: var(--font-body); font-size: 13px; color: var(--color-body);
-    line-height: 1.65; margin: 0 0 10px;
+  .tc-heading {
+    font-family: var(--font-heading); font-size: 11px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-ink);
+    margin: 0; padding: 14px 20px 0;
+    background: var(--color-surface);
   }
-  .wo-tc p strong { color: var(--color-ink); }
+  .tc-scroll-hint {
+    font-family: var(--font-body); font-size: 11px; color: var(--color-brand);
+    margin: 0; padding: 4px 20px 10px;
+    background: var(--color-surface);
+  }
+  .tc-scroll-hint.done { color: #5a8a5a; }
+  .tc-scroll {
+    height: 300px; overflow-y: auto;
+    padding: 16px 20px; background: #fff;
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .tc-scroll p {
+    font-family: var(--font-body); font-size: 12.5px; color: var(--color-body);
+    line-height: 1.7; margin: 0 0 12px;
+  }
+  .tc-scroll p strong { color: var(--color-ink); }
+  .tc-section {
+    font-family: var(--font-heading) !important; font-size: 11px !important;
+    font-weight: 700 !important; letter-spacing: 0.12em !important;
+    text-transform: uppercase !important; color: var(--color-ink) !important;
+    margin: 20px 0 8px !important; border-top: 1px solid var(--color-border);
+    padding-top: 16px !important;
+  }
+  .checkbox-label {
+    display: flex; align-items: flex-start; gap: 10px;
+    font-family: var(--font-body); font-size: 14px; color: var(--color-ink);
+    cursor: pointer; padding: 14px 20px;
+    background: var(--color-surface);
+  }
+  .checkbox-label input[disabled] { opacity: 0.35; cursor: not-allowed; }
+  .checkbox-label input { accent-color: var(--color-brand); width: 16px; height: 16px; flex: 0 0 16px; margin-top: 2px; }
   .checkbox-label {
     display: flex; align-items: flex-start; gap: 10px;
     font-family: var(--font-body); font-size: 14px; color: var(--color-ink);
@@ -359,6 +570,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   @media (max-width: 600px) {
     .wo-row { grid-template-columns: 1fr; }
     .wo-grid-3 { grid-template-columns: 1fr 1fr; }
+    .wo-cc-row { grid-template-columns: 1fr 1fr; }
+    .wo-cc-cvv { grid-column: 1 / -1; max-width: 120px; }
+    .wo-ach-row { grid-template-columns: 1fr; }
+    .upload-zones { grid-template-columns: 1fr; }
     .loc-other-input { width: 100% !important; }
   }
 </style>
@@ -377,6 +592,73 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       if (!other.disabled) other.focus();
     });
   });
+
+  // T&C scroll gate
+  const tcScroll = document.getElementById('tc-scroll');
+  const tcCheckbox = document.getElementById('wo-terms') as HTMLInputElement;
+  const tcHint = document.getElementById('tc-hint');
+  const woBtn = document.querySelector('.wo-btn') as HTMLButtonElement;
+
+  tcScroll?.addEventListener('scroll', () => {
+    const atBottom = tcScroll.scrollTop + tcScroll.clientHeight >= tcScroll.scrollHeight - 8;
+    if (atBottom && tcCheckbox.disabled) {
+      tcCheckbox.disabled = false;
+      if (tcHint) { tcHint.textContent = 'Please check the box below to confirm agreement.'; tcHint.classList.add('done'); }
+    }
+  });
+
+  // Payment method — show/hide fields
+  document.getElementById('wo-payment')?.addEventListener('change', (e) => {
+    const val = (e.target as HTMLSelectElement).value;
+    document.getElementById('pay-cc')!.style.display  = val === 'Credit Card' ? 'block' : 'none';
+    document.getElementById('pay-ach')!.style.display = val === 'Bank/ACH'    ? 'block' : 'none';
+  });
+
+  // File upload zones with add/remove
+  function setupUpload(inputId: string, listId: string) {
+    const input = document.getElementById(inputId) as HTMLInputElement;
+    const list = document.getElementById(listId)!;
+    const files: File[] = [];
+
+    input.addEventListener('change', () => {
+      Array.from(input.files ?? []).forEach(f => {
+        if (!files.find(x => x.name === f.name && x.size === f.size)) files.push(f);
+      });
+      render();
+      sync();
+    });
+
+    function render() {
+      list.innerHTML = '';
+      files.forEach((f, i) => {
+        const li = document.createElement('li');
+        li.style.cssText = 'display:flex;align-items:center;padding:3px 6px 3px 10px;background:#f5f5f5;border:1px solid #e0e0e0;border-radius:3px;margin-top:5px;';
+        const name = document.createElement('span');
+        name.textContent = f.name;
+        name.style.cssText = 'font-size:11px;color:#666;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;';
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.textContent = '✕';
+        btn.style.cssText = 'background:none;border:none;cursor:pointer;padding:0 2px;margin-left:6px;font-size:9px;color:#999;line-height:1;flex-shrink:0;';
+        btn.addEventListener('mouseover', () => btn.style.color = '#c0392b');
+        btn.addEventListener('mouseout', () => btn.style.color = '#999');
+        btn.addEventListener('click', () => { files.splice(i, 1); render(); sync(); });
+        li.appendChild(name);
+        li.appendChild(btn);
+        list.appendChild(li);
+      });
+    }
+
+    function sync() {
+      const dt = new DataTransfer();
+      files.forEach(f => dt.items.add(f));
+      input.files = dt.files;
+    }
+  }
+
+  setupUpload('upload-sow', 'sow-list');
+  setupUpload('upload-pics', 'pics-list');
+  setupUpload('upload-po', 'po-list');
 
   // Set auth date to today by default
   const today = new Date().toISOString().split('T')[0];
@@ -403,7 +685,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       } else { throw new Error(); }
     }).catch(() => {
       (form.querySelector('.wo-error') as HTMLElement).style.display = 'block';
-      btn.disabled = false; btn.textContent = 'Submit Work Order →';
+      btn.disabled = false; btn.textContent = 'Submit Work Authorization →';
     });
   });
 </script>
