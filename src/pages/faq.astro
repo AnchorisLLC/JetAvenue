@@ -1,0 +1,57 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import FAQ from '../components/FAQ.astro';
+import CtaStrip from '../components/CtaStrip.astro';
+import { faqItems } from '../data/faq';
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+---
+
+<BaseLayout
+  title="JetAvenue FAQ: Mobile Private Jet Maintenance, Answered"
+  description="Common questions about JetAvenue's mobile jet maintenance — what we service, where we operate, FAA certification, and how to get started."
+  canonicalPath="/faq"
+  jsonLd={faqSchema}
+>
+
+  <section class="faq-hero">
+    <p class="eyebrow">COMMON QUESTIONS</p>
+    <h1>Frequently Asked Questions</h1>
+    <p>What operators ask before their first service with JetAvenue. Don't see your question? <a href="/contact">Get in touch</a> and we'll answer within one business day.</p>
+  </section>
+
+  <FAQ items={faqItems} showHeader={false} />
+  <CtaStrip />
+
+</BaseLayout>
+
+<style>
+  .faq-hero {
+    background: var(--color-surface);
+    text-align: center;
+    padding: var(--space-xl) var(--space-md) var(--space-lg);
+  }
+  .eyebrow {
+    font-family: var(--font-heading); font-size: 11px; font-weight: 700;
+    letter-spacing: 0.2em; color: var(--color-brand); text-transform: uppercase;
+    margin: 0 0 12px;
+  }
+  .faq-hero h1 {
+    font-family: var(--font-heading); font-size: clamp(28px, 4vw, 48px);
+    font-weight: 800; color: var(--color-ink); margin: 0 0 16px; letter-spacing: -0.02em;
+  }
+  .faq-hero p {
+    font-family: var(--font-body); font-size: 16px; color: var(--color-body);
+    max-width: 560px; margin: 0 auto; line-height: 1.7;
+  }
+  .faq-hero a { color: var(--color-brand); font-weight: 600; text-decoration: none; }
+  .faq-hero a:hover { text-decoration: underline; }
+</style>
