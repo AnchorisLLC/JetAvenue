@@ -235,8 +235,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <!-- ── Credit Card details (shown only when Method Type = Credit Card) ── -->
         <div class="wo-cc" id="cc-fields" hidden>
           <p class="cc-note">Provide the cardholder details below. For your security we never collect the card number, expiration, or CVV. Those are arranged with Jet Avenue directly.</p>
+          <p class="cc-error" id="cc-error" hidden></p>
           <div class="wo-group">
-            <label>Card Type</label>
+            <label>Card Type <span class="req">*</span></label>
             <div class="wo-radios">
               <label class="radio-label"><input type="radio" name="cc_type" value="Visa" /> Visa</label>
               <label class="radio-label"><input type="radio" name="cc_type" value="Mastercard" /> Mastercard</label>
@@ -246,16 +247,16 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           </div>
           <div class="wo-row">
             <div class="wo-group">
-              <label for="cc-name">Name on Card</label>
+              <label for="cc-name">Name on Card <span class="req">*</span></label>
               <input type="text" id="cc-name" name="cc_name" placeholder="Cardholder name" />
             </div>
             <div class="wo-group">
-              <label for="cc-phone">Cardholder Phone</label>
+              <label for="cc-phone">Cardholder Phone <span class="req">*</span></label>
               <input type="tel" id="cc-phone" name="cc_phone" placeholder="(800) 555-0100" />
             </div>
           </div>
           <div class="wo-group">
-            <label>Cardholder Billing Address</label>
+            <label>Cardholder Billing Address <span class="req">*</span></label>
             <input type="text" name="cc_billing_street" placeholder="Street address" style="margin-bottom:8px" />
             <div class="wo-grid-csz">
               <input type="text" name="cc_billing_city" placeholder="City" />
@@ -407,6 +408,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   .cc-note {
     font-family: var(--font-body); font-size: 12.5px; color: var(--color-body);
     line-height: 1.55; margin: 0 0 20px;
+  }
+  .cc-error {
+    font-family: var(--font-body); font-size: 12.5px; color: #c0392b;
+    font-weight: 600; margin: 0 0 18px;
   }
 
   /* Honeypot — visually hidden, off-screen, not announced to AT */
@@ -730,6 +735,27 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       document.querySelector('.wo-tc')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       if (tcHint) tcHint.textContent = 'Please read and agree to the Terms & Conditions before submitting.';
       return;
+    }
+
+    // Credit-card details are required when Method Type = Credit Card.
+    const ccError = document.getElementById('cc-error');
+    if (paySelect && paySelect.value === 'Credit Card') {
+      const ccLabels: Record<string, string> = {
+        cc_type: 'card type', cc_name: 'name on card', cc_phone: 'cardholder phone',
+        cc_billing_street: 'billing street', cc_billing_city: 'city',
+        cc_billing_state: 'state', cc_billing_zip: 'zip code',
+      };
+      const missing = Object.keys(ccLabels).filter((n) => {
+        if (n === 'cc_type') return !form.querySelector('input[name="cc_type"]:checked');
+        const el = form.querySelector(`[name="${n}"]`) as HTMLInputElement | null;
+        return !el || !el.value.trim();
+      }).map((n) => ccLabels[n]);
+      if (missing.length) {
+        if (ccError) { ccError.textContent = 'Please complete the credit card details: ' + missing.join(', ') + '.'; ccError.hidden = false; }
+        document.getElementById('cc-fields')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+      if (ccError) ccError.hidden = true;
     }
 
     const btn = form.querySelector('.wo-btn') as HTMLButtonElement;
